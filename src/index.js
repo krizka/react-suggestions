@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, Fragment } from 'react'
 import './styles.css'
 
 function debounce(fn, delay) {
@@ -28,7 +28,7 @@ class ReactSuggestions extends PureComponent {
 
   constructor(props) {
     super(props)
-  
+
     this.state = initialState
 
     if (!props.token) {
@@ -181,13 +181,11 @@ class ReactSuggestions extends PureComponent {
   }
 
   render() {
-    let { query: omit, token, min, count, className, delay, locations, ...rest } = this.props
+    let { query: omit, token, min, count, suggestionsClass, delay, locations, ...rest } = this.props
     let { query, suggestions, isOpen, focusedIndex } = this.state
 
-    let wrapperCns = className ? `react-suggestions ${className}` : 'react-suggestions'
-
     return (
-      <div className={ wrapperCns }>
+      <Fragment>
         <input
           { ...rest }
           type="text"
@@ -198,9 +196,10 @@ class ReactSuggestions extends PureComponent {
           onKeyPress={ this.handleKeyPress }
           onKeyDown={ this.handleKeyPress }
         />
-
-        { !!suggestions.length && isOpen && <ul>{ this.renderSuggestions() }</ul> }
-      </div>
+        <div className={`react-suggestions ${suggestionsClass || ''}`}>
+          { !!suggestions.length && isOpen && <ul>{ this.renderSuggestions() }</ul> }
+        </div>
+      </Fragment>
     )
   };
 }
